@@ -53,10 +53,31 @@ function listTasks() {
     // list all tasks by category.
     for(let category in tasksByCategory){
         const categoryDiv = document.createElement("div");
-        categoryDiv.classList.add("category")
+        categoryDiv.classList.add("category");
 
         const categoryTitle = document.createElement("h3");
-        categoryTitle.classList.add("")
+        categoryTitle.textContent = category;
+        categoryDiv.appendChild(categoryTitle);
+        
+        tasksByCategory[category].forEach((task,index) => {
+            const taskDiv = document.createElement("div");
+            taskDiv.classList.add("task");
+
+
+            const taskSpan = document.createElement("span");
+            taskSpan.textContent = task;
+
+            const removeBtn = document.createElement("button");
+           removeBtn.textContent = "Remove";
+            removeBtn.onclick = () => removeTask(category,index);
+            
+            taskDiv.appendChild(taskSpan);
+            taskDiv.appendChild(removeBtn);
+            categoryDiv.appendChild(taskDiv);
+            
+    
+        });
+        tasksList.appendChild(categoryDiv);
     }
 
     // show the tasks in DOM element tasksList
@@ -67,6 +88,11 @@ function listTasks() {
 function removeTask(category, taskIndex) {
 
     // remove tasks from object tasksByCategory
+    tasksByCategory[category] = tasksByCategory[category].filter((_,index)=> index !==taskIndex);
+
+    if(tasksByCategory[category].length === 0){
+        delete tasksByCategory[category];
+    }
     
     // If the category is empty after removal, delete the category
 
